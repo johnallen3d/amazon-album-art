@@ -15,4 +15,13 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'amazon-album-art'
 
 class Test::Unit::TestCase
+  def api_key
+    # 'test_key'
+    'AKIAI2W34CKOSDT246UA'
+  end
+
+  def secret_key
+    # 'secret_key'
+    '65lCpK5/rt1pIenlF35oB8pPzm2KCSaqkVsbWG54'
+  end
 end

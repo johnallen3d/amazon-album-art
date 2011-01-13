@@ -4,12 +4,14 @@ require 'sucker'
 module AmazonAlbumArt
 
   def self.new(access_key, secret_key, locale = "us")
-    Client.new(access_key, secret_key)
+    Client.new(access_key, secret_key, locale)
   end
 
   class Client
 
     def initialize(access_key, secret_key, locale)
+      raise ArgumentError.new("An access and secret key are require") if access_key.blank? || secret_key.blank?
+      
       @worker = Sucker.new(
         :locale => "us",
         :key    => access_key, 
@@ -18,6 +20,8 @@ module AmazonAlbumArt
     end
 
     def search(artist, album, sizes = [:swatch, :small, :thumbnail, :tiny, :medium, :large])
+      raise ArgumentError.new("An artist and album are required to search") if artist.blank? || album.blank?
+
       # Prepare a request.
       @worker << {
         "Operation"     => "ItemSearch",

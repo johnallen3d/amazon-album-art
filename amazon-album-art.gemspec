@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "amazon-album-art.gemspec",
     "lib/amazon-album-art.rb",
     "lib/amazon-album-art/client.rb",
     "test/helper.rb",

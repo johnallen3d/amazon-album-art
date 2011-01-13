@@ -8,13 +8,17 @@ A specialized Amazon AWS gem for finding Album Art running on top of the 'sucker
   
 == USAGE:
 
+Create a client
+
+  client = AmazonAlbumArt.new('YOUR_ACCESS_KEY', 'YOUR_SECRET_KEY')
+
 Search for all available image sizes
 
-  AlbumArt.search("phish", "rift")
+  client.search("phish", "rift")
   
-Search for a medium and large image
+Or search for a medium and large image
 
-  AlbumArt.search("phish", "rift", [:medium, :large])
+  client.search("phish", "rift", [:medium, :large])
 
 These methods will return a hash with the found artist and album names along with URL's to the requested image sizes. Example: 
 

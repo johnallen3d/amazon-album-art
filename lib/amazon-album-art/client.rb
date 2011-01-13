@@ -3,13 +3,13 @@ require 'sucker'
 
 module AmazonAlbumArt
 
-  def self.new(access_key, secret_key)
+  def self.new(access_key, secret_key, locale = "us")
     Client.new(access_key, secret_key)
   end
 
   class Client
 
-    def initialize(access_key, secret_key)
+    def initialize(access_key, secret_key, locale)
       @worker = Sucker.new(
         :locale => "us",
         :key    => access_key, 

@@ -24,14 +24,12 @@ These methods will return a hash with the found artist and album names along wit
 
   { :artist => "Phish", :album => "Rift", :images => { :medium => "http://ecx.images-amazon.com/images/I/511RmbQV7dL._SL160_.jpg", :large => "http://ecx.images-amazon.com/images/I/511RmbQV7dL.jpg" } }
 
-* TODO: implement tests :-/
 * TODO: offer options to return different image sets (Primary, Vibrant etc...)
 
 == ACKNOWLEDGEMENTS 
 
-The sucker gem by papercavalier does all the heavy lifting: https://github.com/papercavalier/sucker
-
-Grabbed some fuzzy match code from: http://code.coneybeare.net/amazon-album-covers-in-ruby-on-rails/
+* The sucker gem by papercavalier does all the heavy lifting: https://github.com/papercavalier/sucker/
+* Grabbed some fuzzy match code from: http://code.coneybeare.net/amazon-album-covers-in-ruby-on-rails/
 
 == Contributing to amazon-album-art
  

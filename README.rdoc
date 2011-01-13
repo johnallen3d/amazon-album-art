@@ -1,6 +1,33 @@
 = amazon-album-art
 
-Description goes here.
+A specialized Amazon AWS gem for finding Album Art running on top of the 'sucker' gem
+
+== INSTALLATION:
+
+  gem install amazon-album-art
+  
+== USAGE:
+
+Search for all available image sizes
+
+  AlbumArt.search("phish", "rift")
+  
+Search for a medium and large image
+
+  AlbumArt.search("phish", "rift", [:medium, :large])
+
+These methods will return a hash with the found artist and album names along with URL's to the requested image sizes. Example: 
+
+  { :artist => "Phish", :album => "Rift", :images => { :medium => "http://ecx.images-amazon.com/images/I/511RmbQV7dL._SL160_.jpg", :large => "http://ecx.images-amazon.com/images/I/511RmbQV7dL.jpg" } }
+
+* TODO: implement tests :-/
+* TODO: offer options to return different image sets (Primary, Vibrant etc...)
+
+== ACKNOWLEDGEMENTS 
+
+The sucker gem by papercavalier does all the heavy lifting: https://github.com/papercavalier/sucker
+
+Grabbed some fuzzy match code from: http://code.coneybeare.net/amazon-album-covers-in-ruby-on-rails/
 
 == Contributing to amazon-album-art
  

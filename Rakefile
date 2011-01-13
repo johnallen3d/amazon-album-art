@@ -15,14 +15,17 @@ Jeweler::Tasks.new do |gem|
   gem.name = "amazon-album-art"
   gem.homepage = "http://github.com/johnallen3d/amazon-album-art"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{A specialized Amazon AWS gem for finding Album Art}
+  gem.description = %Q{A specialized Amazon AWS gem for finding Album Art running on top of the 'sucker' gem}
   gem.email = "john@threedogconsulting.com"
   gem.authors = ["John Allen"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
   #  gem.add_development_dependency 'rspec', '> 1.2.3'
+  gem.add_runtime_dependency 'nokogiri', '>= 1.4.4'
+  gem.add_runtime_dependency 'sucker', '>= 1.1.4'
+  
 end
 Jeweler::RubygemsDotOrgTasks.new
 

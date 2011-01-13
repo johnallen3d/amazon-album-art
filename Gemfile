@@ -3,6 +3,10 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
+gem 'nokogiri', '>= 1.4.4'
+gem 'sucker', '>= 1.1.4'
+
+
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do

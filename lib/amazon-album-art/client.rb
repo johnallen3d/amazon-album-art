@@ -31,7 +31,6 @@ module AmazonAlbumArt
 
       # Make sure nothing went awry.
       raise AmazonAlbumArtError.new("Error finding album") unless results.valid?
-      
 
       # Now parse it.
       results.map("Item") do |match|

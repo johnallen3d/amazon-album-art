@@ -41,7 +41,7 @@ module AmazonAlbumArt
         attribs = match['ItemAttributes']
 
         # grab values that were returned
-        found_artist, found_album = (attribs['Artist'] ||= attribs['Author'] ||= attribs["Creator"]["__content__"]), match['ItemAttributes']['Title']
+        found_artist, found_album = (attribs['Artist'] ||= attribs['Author'] ||= (attribs.has_key?("Creator") ? attribs["Creator"]["__content__"] : "")), match['ItemAttributes']['Title']
 
         # check to see if we have a reasonable match
         next unless !found_album.blank? && !found_artist.blank? && matches?(album, found_album) && matches?(artist, found_artist)

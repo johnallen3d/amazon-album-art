@@ -1,14 +1,21 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    activesupport (3.0.3)
+    curb (0.7.9)
     git (1.2.5)
     jeweler (1.5.2)
       bundler (~> 1.0.0)
       git (>= 1.2.5)
       rake
+    nokogiri (1.4.4)
     rake (0.8.7)
     rcov (0.9.9)
     shoulda (2.11.3)
+    sucker (1.1.4)
+      activesupport (>= 2.3.2)
+      curb (~> 0.7.0)
+      nokogiri (~> 1.4.0)
 
 PLATFORMS
   ruby
@@ -16,5 +23,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0.0)
   jeweler (~> 1.5.2)
+  nokogiri (>= 1.4.4)
   rcov
   shoulda
+  sucker (>= 1.1.4)

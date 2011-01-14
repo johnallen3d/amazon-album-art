@@ -47,6 +47,8 @@ class TestAmazonAlbumArt < Test::Unit::TestCase
             end
           end
         end
+      end
+      context "search for problematic items" do
         context "no search values" do
           should "raise an ArgumentError" do
             assert_raise ArgumentError do

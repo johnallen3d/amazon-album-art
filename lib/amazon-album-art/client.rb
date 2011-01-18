@@ -40,7 +40,6 @@ module AmazonAlbumArt
       results.map("Item") do |match|
         begin
           attribs = match['ItemAttributes']
-          puts attribs
           # grab values that were returned
           found_artist, found_album = (attribs['Artist'] ||= attribs['Author'] ||= (attribs.has_key?("Creator") ? attribs["Creator"]["__content__"] : "")), match['ItemAttributes']['Title']
         rescue StandardError => bang

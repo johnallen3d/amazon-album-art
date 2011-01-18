@@ -16,7 +16,7 @@ require 'amazon-album-art'
 
 class Test::Unit::TestCase
   def api_key
-    "api-key"
+    'api-key'
   end
   def secret_key
     "secret-key"

@@ -34,12 +34,13 @@ module AmazonAlbumArt
       results = @worker.get
 
       # Make sure nothing went awry.
-      raise AmazonAlbumArtError.new("Error finding album") unless results.valid?
+      check_response(results, "Error finding album")
 
       # Now parse it.
       results.map("Item") do |match|
         begin
           attribs = match['ItemAttributes']
+          puts attribs
           # grab values that were returned
           found_artist, found_album = (attribs['Artist'] ||= attribs['Author'] ||= (attribs.has_key?("Creator") ? attribs["Creator"]["__content__"] : "")), match['ItemAttributes']['Title']
         rescue StandardError => bang
@@ -64,22 +65,16 @@ module AmazonAlbumArt
         images = @worker.get
 
         # Make sure nothing went awry.
-        raise AmazonAlbumArtError.new("Error finding images") unless images.valid?
+        check_response(results, "Error finding images")
 
         # parse response
         doc = Nokogiri::XML.parse(images.body)
 
-        urls = {}
-
-        # build the hash with requested values
-        sizes.each do |size|
-          urls.merge!({ size => doc.css("Item > ImageSets > ImageSet[@Category=\"primary\"] > #{size.to_s.capitalize}Image > URL").text })
-        end
-
-        return { :artist => found_artist, :album => found_album, :images => urls }
+        return { :artist => found_artist, :album => found_album, :images => load_images(doc, sizes) }
       end
     end
 
+  private
     def matches?(s1, s2, tolerance = 2)
       s1 == s2 ||
       s1 =~ /#{Regexp.escape s2}/i ||
@@ -105,6 +100,19 @@ module AmazonAlbumArt
           d[m] = x
       end
       return x
+    end
+    
+    def load_images(doc, sizes)
+      # build the hash with requested values
+      {}.tap do |urls|
+        sizes.each do |size|
+          urls.merge!({ size => doc.css("Item > ImageSets > ImageSet[@Category=\"primary\"] > #{size.to_s.capitalize}Image > URL").text })
+        end
+      end
+    end
+
+    def check_response(results, msg)
+      raise AmazonAlbumArtError.new(msg) unless results.valid? || results.find("Error").size > 0
     end
   end
   

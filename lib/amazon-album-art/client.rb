@@ -34,16 +34,16 @@ module AmazonAlbumArt
       results = @worker.get
 
       # Make sure nothing went awry.
-      check_response(results, "Error finding album")
+      return nil if !check_response?(results, "Error finding album")
 
       # Now parse it.
       results.map("Item") do |match|
         begin
           attribs = match['ItemAttributes']
           # grab values that were returned
-          found_artist, found_album = (attribs['Artist'] ||= attribs['Author'] ||= (attribs.has_key?("Creator") ? attribs["Creator"]["__content__"] : "")), match['ItemAttributes']['Title']
+          found_artist, found_album = load_artist(attribs), attribs.has_key?('Title') ? attribs['Title'] : ""
         rescue StandardError => bang
-          # getting unhandled error from Sucker in some cases
+          # handled error from Sucker in some cases
           next
         end
         # check to see if we have a reasonable match
@@ -64,13 +64,15 @@ module AmazonAlbumArt
         images = @worker.get
 
         # Make sure nothing went awry.
-        check_response(results, "Error finding images")
+        return nil if !check_response?(results, "Error finding images")
 
         # parse response
         doc = Nokogiri::XML.parse(images.body)
 
         return { :artist => found_artist, :album => found_album, :images => load_images(doc, sizes) }
       end
+      
+      return nil # nothing found
     end
 
   private
@@ -101,6 +103,15 @@ module AmazonAlbumArt
       return x
     end
     
+    def load_artist(attribs)
+      # found artists are returned in many different permutations  
+      return attribs['Artist'] if attribs.has_key?('Artist')
+      return attribs['Author'] if attribs.has_key?('Author')
+      return attribs['Creator'].map { |item| item["__content__"] if item.has_key?("__content__") }.join(" and ") if attribs.has_key?("Creator") && attribs['Creator'].is_a?(Array)
+      return attribs["Creator"]["__content__"] if attribs.has_key?("Creator") && attribs["Creator"].has_key?('__content__')
+      return nil
+    end
+    
     def load_images(doc, sizes)
       # build the hash with requested values
       {}.tap do |urls|
@@ -110,8 +121,9 @@ module AmazonAlbumArt
       end
     end
 
-    def check_response(results, msg)
-      raise AmazonAlbumArtError.new(msg) unless results.valid? || results.find("Error").size > 0
+    def check_response?(results, msg)
+      # raise AmazonAlbumArtError.new(msg) unless results.valid? || results.find("Error").size > 0
+      results.valid? || results.find("Error").size == 0
     end
   end
   

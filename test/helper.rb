@@ -14,11 +14,14 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'amazon-album-art'
 
-class Test::Unit::TestCase
-  def api_key
-    'api-key'
-  end
-  def secret_key
-    "secret-key"
-  end
+def api_key
+  'api-key'
+end
+def secret_key
+  "secret-key"
+end
+def fixture_file(filename)
+  return '' if filename == ''
+  file_path = File.expand_path(File.dirname(__FILE__) + '/fixtures/' + filename)
+  File.read(file_path)
 end

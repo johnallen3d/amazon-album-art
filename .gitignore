@@ -19,3 +19,6 @@ pkg
 
 # internal tests
 /test/additional.rb
+
+# internal testing fixture
+test/fixtures/albums.json

@@ -12,4 +12,5 @@ group :development do
   gem "rcov", ">= 0"
   gem 'nokogiri', '>= 1.4.4'
   gem 'sucker', '>= 1.1.4'
+  gem 'json'
 end

@@ -22,6 +22,9 @@ module AmazonAlbumArt
     def search(artist, album, sizes = [:swatch, :small, :thumbnail, :tiny, :medium, :large])
       raise ArgumentError.new("An artist and album are required to search") if artist.blank? || album.blank?
 
+      # clean up params, this client may be used repeatedly
+      clean_params(%w{IdType ResponseGroup ItemId})
+
       # Prepare a request.
       @worker << {
         "Operation"     => "ItemSearch",
@@ -41,7 +44,7 @@ module AmazonAlbumArt
         begin
           attribs = match['ItemAttributes']
           # grab values that were returned
-          found_artist, found_album = load_artist(attribs), attribs.has_key?('Title') ? attribs['Title'] : ""
+          found_artist, found_album = load_artist(attribs), load_album(attribs)
         rescue StandardError => bang
           # handled error from Sucker in some cases
           next
@@ -50,7 +53,8 @@ module AmazonAlbumArt
         next unless !found_album.blank? && !found_artist.blank? && matches?(album, found_album) && matches?(artist, found_artist)
 
         # remove params not used for image search
-        @worker.parameters.delete_if { |k,v| %w{SearchIndex Title Artist}.include? k }
+        # @worker.parameters.delete_if { |k,v| %w{SearchIndex Title Artist}.include? k }
+        clean_params(%w{SearchIndex Title Artist})
 
         # fetch images
         @worker << {
@@ -103,6 +107,11 @@ module AmazonAlbumArt
       return x
     end
     
+    def clean_params(params)
+      # remove given params so worker can be reused
+      @worker.parameters.delete_if { |k,v| params.include? k }
+    end
+    
     def load_artist(attribs)
       # found artists are returned in many different permutations  
       return attribs['Artist'] if attribs.has_key?('Artist')
@@ -110,6 +119,10 @@ module AmazonAlbumArt
       return attribs['Creator'].map { |item| item["__content__"] if item.has_key?("__content__") }.join(" and ") if attribs.has_key?("Creator") && attribs['Creator'].is_a?(Array)
       return attribs["Creator"]["__content__"] if attribs.has_key?("Creator") && attribs["Creator"].has_key?('__content__')
       return nil
+    end
+    
+    def load_album(attribs)
+      attribs.has_key?('Title') ? attribs['Title'] : ""
     end
     
     def load_images(doc, sizes)

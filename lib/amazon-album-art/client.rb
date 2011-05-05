@@ -137,8 +137,12 @@ module AmazonAlbumArt
     end
 
     def check_response?(results, msg)
-      # raise AmazonAlbumArtError.new(msg) unless results.valid? || results.find("Error").size > 0
-      results.valid? || results.find("Error").size == 0
+      begin
+        return results.valid? || results.find("Error").size == 0
+      rescue StandardError => bang
+        # handled error from Sucker in some cases
+        return false
+      end
     end
   end
   

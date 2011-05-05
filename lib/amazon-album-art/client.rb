@@ -43,6 +43,7 @@ module AmazonAlbumArt
       results.map("Item") do |match|
         begin
           attribs = match['ItemAttributes']
+          puts attribs
           # grab values that were returned
           found_artist, found_album = load_artist(attribs), load_album(attribs)
         rescue StandardError => bang
@@ -114,6 +115,7 @@ module AmazonAlbumArt
     
     def load_artist(attribs)
       # found artists are returned in many different permutations  
+      return attribs['Artist'].first if attribs.has_key?('Artist') && attribs['Artist'].is_a?(Array)
       return attribs['Artist'] if attribs.has_key?('Artist')
       return attribs['Author'] if attribs.has_key?('Author')
       return attribs['Creator'].map { |item| item["__content__"] if item.has_key?("__content__") }.join(" and ") if attribs.has_key?("Creator") && attribs['Creator'].is_a?(Array)

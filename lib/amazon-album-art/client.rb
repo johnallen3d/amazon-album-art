@@ -10,7 +10,7 @@ module AmazonAlbumArt
   class Client
 
     def initialize(access_key, secret_key, locale)
-      raise ArgumentError.new("An access and secret key are require") if access_key.blank? || secret_key.blank?
+      raise ArgumentError.new("An access and secret key are require") if access_key.empty? || secret_key.empty?
       
       @worker = Sucker.new(
         :locale => "us",
@@ -20,7 +20,7 @@ module AmazonAlbumArt
     end
 
     def search(artist, album, sizes = [:swatch, :small, :thumbnail, :tiny, :medium, :large])
-      raise ArgumentError.new("An artist and album are required to search") if artist.blank? || album.blank?
+      raise ArgumentError.new("An artist and album are required to search") if artist.empty? || album.empty?
 
       # clean up params, this client may be used repeatedly
       clean_params(%w{IdType ResponseGroup ItemId})
@@ -50,7 +50,7 @@ module AmazonAlbumArt
           next
         end
         # check to see if we have a reasonable match
-        next unless !found_album.blank? && !found_artist.blank? && matches?(album, found_album) && matches?(artist, found_artist)
+        next unless !found_album.empty? && !found_artist.empty? && matches?(album, found_album) && matches?(artist, found_artist)
 
         # remove params not used for image search
         # @worker.parameters.delete_if { |k,v| %w{SearchIndex Title Artist}.include? k }

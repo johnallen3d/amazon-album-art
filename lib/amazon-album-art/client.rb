@@ -43,7 +43,6 @@ module AmazonAlbumArt
       results.map("Item") do |match|
         begin
           attribs = match['ItemAttributes']
-          puts attribs
           # grab values that were returned
           found_artist, found_album = load_artist(attribs), load_album(attribs)
         rescue StandardError => bang

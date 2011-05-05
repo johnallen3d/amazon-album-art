@@ -18,7 +18,7 @@ def api_key
   'api-key'
 end
 def secret_key
-  "secret-key"
+  'secret-key'
 end
 def fixture_file(filename)
   return '' if filename == ''

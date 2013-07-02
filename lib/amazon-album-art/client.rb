@@ -3,19 +3,20 @@ require 'sucker'
 
 module AmazonAlbumArt
 
-  def self.new(access_key, secret_key, locale = "us")
-    Client.new(access_key, secret_key, locale)
+  def self.new(access_key, secret_key, associate_tag, locale = "us")
+    Client.new(access_key, secret_key, associate_tag, locale)
   end
 
   class Client
 
-    def initialize(access_key, secret_key, locale)
-      raise ArgumentError.new("An access and secret key are require") if access_key.empty? || secret_key.empty?
+    def initialize(access_key, secret_key, associate_tag, locale)
+      raise ArgumentError.new("Access, secret key and associate tag are required") if access_key.empty? || secret_key.empty? || associate_tag.empty?
       
       @worker = Sucker.new(
         :locale => "us",
         :key    => access_key, 
-        :secret => secret_key
+        :secret => secret_key,
+        :associate_tag => associate_tag
       )
     end
 
@@ -23,7 +24,7 @@ module AmazonAlbumArt
       raise ArgumentError.new("An artist and album are required to search") if artist.empty? || album.empty?
 
       # clean up params, this client may be used repeatedly
-      clean_params(%w{IdType ResponseGroup ItemId})
+      @worker.parameters.reset
 
       # Prepare a request.
       @worker << {
@@ -53,8 +54,7 @@ module AmazonAlbumArt
         next unless !found_album.empty? && !found_artist.empty? && matches?(album, found_album) && matches?(artist, found_artist)
 
         # remove params not used for image search
-        # @worker.parameters.delete_if { |k,v| %w{SearchIndex Title Artist}.include? k }
-        clean_params(%w{SearchIndex Title Artist})
+        @worker.parameters.reset
 
         # fetch images
         @worker << {
@@ -105,11 +105,6 @@ module AmazonAlbumArt
           d[m] = x
       end
       return x
-    end
-    
-    def clean_params(params)
-      # remove given params so worker can be reused
-      @worker.parameters.delete_if { |k,v| params.include? k }
     end
     
     def load_artist(attribs)

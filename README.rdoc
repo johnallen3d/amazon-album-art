@@ -10,7 +10,7 @@ A specialized Amazon AWS gem for finding Album Art running on top of the 'sucker
 
 Create a client
 
-  client = AmazonAlbumArt.new('YOUR_ACCESS_KEY', 'YOUR_SECRET_KEY')
+  client = AmazonAlbumArt.new('YOUR_ACCESS_KEY', 'YOUR_SECRET_KEY', 'YOUR_ASSOCIATE_TAG')
 
 Search for all available image sizes
 
